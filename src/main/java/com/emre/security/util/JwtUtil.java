@@ -3,8 +3,13 @@ package com.emre.security.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -15,6 +20,10 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
+
+    @Autowired
+    private TokenBlacklist tokenBlacklist;
     private String SECRET_KEY = "secret";
 
     public String extractUsername(String token) {
@@ -51,6 +60,34 @@ public class JwtUtil {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !tokenBlacklist.isBlacklisted(token));
+    }
+
+    public String extractTokenFromRequest(HttpServletRequest request) {
+        // Get the Authorization header from the request
+        String authorizationHeader = request.getHeader("Authorization");
+
+        // Check if the Authorization header is not null and starts with "Bearer "
+        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+            // Extract the JWT token (remove "Bearer " prefix)
+            return authorizationHeader.substring(7);
+        }
+
+        // If the Authorization header is not valid, return null
+        return null;
+    }
+
+    public void deleteExpiredTokensFromBlacklist() {
+        tokenBlacklist.getBlacklist().removeIf(token -> {
+
+            if(isTokenExpired(token)) {
+                logger.info("Deleted Token: " + token);
+            }
+            return isTokenExpired(token);
+
+
+        });
+        logger.info("Expired tokens are deleted from the blacklist");
+
     }
 }

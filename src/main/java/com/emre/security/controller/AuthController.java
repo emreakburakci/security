@@ -6,7 +6,10 @@ import com.emre.security.model.User;
 import com.emre.security.repository.UserRepository;
 import com.emre.security.service.CustomUserDetailsService;
 import com.emre.security.util.JwtUtil;
+import com.emre.security.util.TokenBlacklist;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,6 +40,9 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private TokenBlacklist tokenBlacklist;
 
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
@@ -76,5 +82,15 @@ public class AuthController {
     @GetMapping("/user")
     public String userAccess() {
         return "User Board";
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String token = jwtUtil.extractTokenFromRequest(request);
+        tokenBlacklist.addToBlacklist(token);
+
+        // Clear any session-related data if necessary
+
+        return ResponseEntity.ok("Logged out successfully");
     }
 }
