@@ -76,28 +76,6 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public Iterable<Employee> getAllEmployees() {
 
-        List<Employee> employees = new ArrayList<>();
-
-        // Create mock Employee objects and add them to the list
-        Employee employee1 = new Employee();
-        employee1.setId(1L);
-        employee1.setFirstName("John");
-        employee1.setLastName("Doe");
-        employee1.setEmailId("john.doe@example.com");
-        employees.add(employee1);
-
-        Employee employee2 = new Employee();
-        employee2.setId(2L);
-        employee2.setFirstName("Jane");
-        employee2.setLastName("Doe");
-        employee2.setEmailId("jane.doe@example.com");
-        employees.add(employee2);
-
-        // Add more mock employees if needed...
-
-        return employees;
-
-
-        // return employeeRepository.findAll();
+         return employeeRepository.findAll();
     }
 }
