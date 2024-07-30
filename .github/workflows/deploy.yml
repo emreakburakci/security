@@ -38,6 +38,6 @@ jobs:
           TOMCAT_PORT: ${{ secrets.TOMCAT_PORT }}
           TOMCAT_PASS: ${{ secrets.TOMCAT_PASS }}
         run: |
-          curl -u "${{ secrets.TOMCAT_USER }}:${{ secrets.TOMCAT_PASS }}" `
+          & "C:\Windows\System32\curl.exe" -u "${{ secrets.TOMCAT_USER }}:${{ secrets.TOMCAT_PASS }}" `
                -T target/security.war `
                "http://${{ secrets.TOMCAT_HOST }}:${{ secrets.TOMCAT_PORT }}/manager/text/deploy?path=/security&update=true"
