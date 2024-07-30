@@ -7,6 +7,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //@CrossOrigin(origins = "http://127.0.0.1:5500")
 @CrossOrigin(origins = "*")
 @RestController
@@ -72,6 +75,29 @@ public class EmployeeController {
     @GetMapping("/getAllEmployees")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public Iterable<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+
+        List<Employee> employees = new ArrayList<>();
+
+        // Create mock Employee objects and add them to the list
+        Employee employee1 = new Employee();
+        employee1.setId(1L);
+        employee1.setFirstName("John");
+        employee1.setLastName("Doe");
+        employee1.setEmailId("john.doe@example.com");
+        employees.add(employee1);
+
+        Employee employee2 = new Employee();
+        employee2.setId(2L);
+        employee2.setFirstName("Jane");
+        employee2.setLastName("Doe");
+        employee2.setEmailId("jane.doe@example.com");
+        employees.add(employee2);
+
+        // Add more mock employees if needed...
+
+        return employees;
+
+
+        // return employeeRepository.findAll();
     }
 }
