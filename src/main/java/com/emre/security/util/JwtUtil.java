@@ -78,6 +78,13 @@ public class JwtUtil {
     }
 
     public void deleteExpiredTokensFromBlacklist() {
+
+        tokenBlacklist.getBlacklist().forEach(token -> {
+
+                logger.info("Token: " + token + "Expiration Date:" + extractExpiration(token).toString() + " Is Expired: " + isTokenExpired(token));
+
+
+        });
         tokenBlacklist.getBlacklist().removeIf(token -> {
 
             if(isTokenExpired(token)) {
