@@ -20,7 +20,7 @@ jobs:
           $mavenZip = "apache-maven-3.8.5-bin.zip"
           $mavenDir = "C:\maven"
           Invoke-WebRequest -Uri $mavenUrl -OutFile $mavenZip
-          Expand-Archive -Path $mavenZip -DestinationPath $mavenDir
+          Expand-Archive -Path $mavenZip -DestinationPath $mavenDir -Force
           echo "M2_HOME=$mavenDir\apache-maven-3.8.5" >> $GITHUB_ENV
           echo "PATH=$mavenDir\apache-maven-3.8.5\bin;$env:PATH" >> $GITHUB_ENV
 
