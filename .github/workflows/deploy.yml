@@ -38,7 +38,30 @@ jobs:
           TOMCAT_HOST: ${{ secrets.TOMCAT_HOST }}
           TOMCAT_PORT: ${{ secrets.TOMCAT_PORT }}
           TOMCAT_PASS: ${{ secrets.TOMCAT_PASS }}
+
+
+
         run: |
-          & "C:\Windows\System32\curl.exe" -u "${{ secrets.TOMCAT_USER }}:${{ secrets.TOMCAT_PASS }}" `
-               -T target/security.war `
-               "http://${{ secrets.TOMCAT_HOST }}:${{ secrets.TOMCAT_PORT }}/manager/text/deploy?path=/security&update=true"
+          
+          $warFilePath = "C:\actions-runner\_work\security\security\target\security.war"
+          $tomcatWebappsPath = "C:\Users\Administrator\Desktop\tomcat\webapps\security.war"
+          $tomcatWebappsExtractedFolderPath = "C:\Users\Administrator\Desktop\tomcat\webapps\security.war"
+          
+          
+          if (Test-Path $tomcatWebappsPath) {
+            Remove-Item $tomcatWebappsPath
+          }
+
+          if (Test-Path $tomcatWebappsExtractedFolderPath) {
+            Remove-Item $tomcatWebappsExtractedFolderPath
+          }
+          
+          # Copy the WAR file to the Tomcat webapps directory
+          Copy-Item -Path $warFilePath -Destination $tomcatWebappsPath
+          
+          # Optionally restart Tomcat
+          # Restart-Service -Name 'Tomcat9' # Adjust the service name if needed
+        #run: |
+        #  & "C:\Windows\System32\curl.exe" -u "${{ secrets.TOMCAT_USER }}:${{ secrets.TOMCAT_PASS }}" `
+        #       -T target/security.war `
+        #       "http://${{ secrets.TOMCAT_HOST }}:${{ secrets.TOMCAT_PORT }}/manager/text/deploy?path=/security&update=true"
