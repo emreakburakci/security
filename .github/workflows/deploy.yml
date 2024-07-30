@@ -27,7 +27,7 @@ jobs:
       - name: Build with Maven
         run: |
               cd C:\actions-runner\_work\security\security
-              C:\maven\bin\mvn clean package
+              mvn clean package
         
 
       - name: List target directory
