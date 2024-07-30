@@ -19,7 +19,12 @@ jobs:
       #  with:
       #    java-version: '21'  # Use the version that matches your project
       #    distribution: 'oraclejdk'
+      - name: Set MAVEN_HOME and PATH
+        run: |
+          echo "M2_HOME=C:\Program Files\maven" >> $GITHUB_ENV
+          echo "PATH=C:\Program Files\maven\bin;$env:PATH" >> $GITHUB_ENV
 
+          
       - name: Build with Maven
         run: mvn clean package
         env:
