@@ -24,13 +24,15 @@ jobs:
           echo "M2_HOME=C:\Program Files\maven" >> $GITHUB_ENV
           echo "PATH=C:\Program Files\maven\bin;$env:PATH" >> $GITHUB_ENV
 
+      - name: Verify Maven Installation
+        run: mvn -version
           
       - name: Build with Maven
         run: mvn clean package
         env:
           JAVA_HOME: ${{ env.JAVA_HOME }}
-          M2_HOME: ${{ env.M2_HOME }}
-          PATH: ${{ env.M2_HOME }}\bin;${{ env.PATH }}
+          M2_HOME: ${{ env.MAVEN_HOME }}
+          PATH: ${{ env.MAVEN_HOME }}\bin;${{ env.PATH }}
           
       - name: Deploy to Tomcat
         env:
