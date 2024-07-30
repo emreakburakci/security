@@ -1,5 +1,6 @@
 package com.emre.security.controller;
 
+import com.emre.security.model.Department;
 import com.emre.security.model.Employee;
 import com.emre.security.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,24 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public Iterable<Employee> getAllEmployees() {
 
-         return employeeRepository.findAll();
+        Department d = new Department();
+        d.setId(1L);
+        d.setName("IT");
+        d.setDescription("Information Technology");
+        d.setEmailId("it@it.com");
+
+        List<Employee> employees = new ArrayList<>();
+        Employee e = new Employee();
+        e.setId(1L);
+        e.setFirstName("Emre");
+        e.setLastName("Kara");
+        e.setEmailId("e@k.com");
+        e.setDepartment(d);
+
+        employees.add(e);
+
+
+        return employees;
+        //return employeeRepository.findAll();
     }
 }
