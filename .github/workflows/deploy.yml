@@ -27,9 +27,6 @@ jobs:
       - name: Build with Maven
         run: C:\maven\bin\mvn -f C:\actions-runner\_work\security\security clean package
 
-      - name: Capture Maven Build Output
-        run: |
-              Get-Content -Path C:\actions-runner\_work\security\security\target\build.log -Tail 100 -Wait
       - name: List target directory
         run: dir target
         working-directory: ./
