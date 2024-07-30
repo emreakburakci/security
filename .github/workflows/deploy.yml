@@ -25,11 +25,8 @@ jobs:
         run: C:\maven\bin\mvn -version
           
       - name: Build with Maven
-        run: C:\maven\bin\mvn clean package
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME }}
-          M2_HOME: ${{ env.MAVEN_HOME }}
-          PATH: ${{ env.MAVEN_HOME }}\bin;${{ env.PATH }}
+        shell: cmd
+        run: C:\maven\bin\mvn -f C:\actions-runner\_work\security\security clean package
 
       - name: List target directory
         run: dir target
