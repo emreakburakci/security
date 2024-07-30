@@ -1,0 +1,33 @@
+name: Deploy to Tomcat
+
+on:
+  push:
+    branches:
+      - main  # Adjust if your default branch is different
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, windows]  # Use your self-hosted Windows runner
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'  # Use the version that matches your project
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Deploy to Tomcat
+        env:
+          TOMCAT_USER: ${{ secrets.TOMCAT_USER }}
+          TOMCAT_HOST: ${{ secrets.TOMCAT_HOST }}
+          TOMCAT_PORT: ${{ secrets.TOMCAT_PORT }}
+          TOMCAT_PASS: ${{ secrets.TOMCAT_PASS }}
+        run: |
+          curl -u $TOMCAT_USER:$TOMCAT_PASS \
+               -T target/security.war \
+               "http://$TOMCAT_HOST:$TOMCAT_PORT/manager/text/deploy?path=/security&update=true"
