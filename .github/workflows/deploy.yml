@@ -14,17 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         
-      - name: Install Maven
-        run: |
-          $mavenUrl = "https://archive.apache.org/dist/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.zip"
-          $mavenZip = "apache-maven-3.8.5-bin.zip"
-          $mavenDir = "C:\maven"
-          Invoke-WebRequest -Uri $mavenUrl -OutFile $mavenZip
-          Expand-Archive -Path $mavenZip -DestinationPath $mavenDir -Force
-          echo "M2_HOME=$mavenDir\apache-maven-3.8.5" >> $GITHUB_ENV
-          echo "PATH=$mavenDir\apache-maven-3.8.5\bin;$env:PATH" >> $GITHUB_ENV
-
-          
       #- name: Set up JDK
       #  uses: actions/setup-java@v3
       #  with:
