@@ -25,7 +25,7 @@ jobs:
           echo "PATH=C:\Program Files\maven\bin;$env:PATH" >> $GITHUB_ENV
 
       - name: Verify Maven Installation
-        run: mvn -version
+        run: C:\Program Files\maven\bin\mvn -version
           
       - name: Build with Maven
         run: mvn clean package
