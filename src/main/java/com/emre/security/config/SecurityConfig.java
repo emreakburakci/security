@@ -45,7 +45,7 @@ public class SecurityConfig  {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeRequests()
-                .requestMatchers("/api/register", "/api/login", "/api/hello", "/pyomo/runScript", "/api/login")
+                .requestMatchers("/api/register", "/api/login", "/api/hello", "/pyomo/runScript", "/api/logout")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
