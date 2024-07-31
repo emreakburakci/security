@@ -1,6 +1,7 @@
 package com.emre.security.util;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +41,12 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        try {
+            return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        }catch (ExpiredJwtException e){
+
+            return null;
+        }
     }
 
     private Boolean isTokenExpired(String token) {
@@ -79,19 +85,19 @@ public class JwtUtil {
 
     public void deleteExpiredTokensFromBlacklist() {
 
+        logger.info("-TOKENS IN THE BLACKLIST:");
         tokenBlacklist.getBlacklist().forEach(token -> {
-
-                logger.info("Token: " + token + "Expiration Date:" + extractExpiration(token).toString() + " Is Expired: " + isTokenExpired(token));
-
+            logger.info("--Token: " + token );
 
         });
         tokenBlacklist.getBlacklist().removeIf(token -> {
-
-            if(isTokenExpired(token)) {
+            Claims claims = extractAllClaims(token);
+            //if claims == null then the token is expired
+            if(claims == null) {
                 logger.info("Deleted Token: " + token);
+                return true;
             }
-            return isTokenExpired(token);
-
+            return false;
 
         });
         logger.info("Expired tokens are deleted from the blacklist");
