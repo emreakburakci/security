@@ -37,6 +37,9 @@ public class JwtUtil {
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
+        if(claims == null){
+            return null;
+        }
         return claimsResolver.apply(claims);
     }
 
@@ -50,7 +53,9 @@ public class JwtUtil {
     }
 
     private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        if(extractExpiration(token) == null){
+            return true;
+        }else {return false;}
     }
 
     public String generateToken(UserDetails userDetails) {
