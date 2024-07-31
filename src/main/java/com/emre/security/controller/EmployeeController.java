@@ -1,18 +1,16 @@
 package com.emre.security.controller;
 
-import com.emre.security.model.Department;
 import com.emre.security.model.Employee;
 import com.emre.security.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 //TEST
 //@CrossOrigin(origins = "http://127.0.0.1:5500")
 @CrossOrigin(origins = "*")
@@ -22,6 +20,9 @@ public class EmployeeController {
 
     @Autowired
     EmployeeRepository employeeRepository;
+
+    @Autowired
+    private PagedResourcesAssembler<Employee> pagedResourcesAssembler;
 
     @PostMapping("/createEmployee")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -78,9 +79,11 @@ public class EmployeeController {
     //get all employees
     @GetMapping("/getAllEmployees")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public Page<Employee> getAllEmployees(@RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "5") int size) {
+    public PagedModel<EntityModel<Employee>> getAllEmployees(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return employeeRepository.findAll(pageable);
+        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+        return pagedResourcesAssembler.toModel(employeePage);
     }
 }
