@@ -4,6 +4,8 @@ import com.emre.security.model.Department;
 import com.emre.security.model.Employee;
 import com.emre.security.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +77,7 @@ public class EmployeeController {
     //get all employees
     @GetMapping("/getAllEmployees")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public Iterable<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public Page<Employee> getAllEmployees(Pageable pageable) {
+        return employeeRepository.findAll(pageable);
     }
 }
