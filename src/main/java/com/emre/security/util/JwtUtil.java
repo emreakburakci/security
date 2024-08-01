@@ -105,7 +105,7 @@ public class JwtUtil {
             return false;
 
         });
-        logger.info("Expired tokens are deleted from the blacklist");
+        logger.info("Token Cleanup Task Runned");
 
     }
 }
