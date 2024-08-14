@@ -3,6 +3,7 @@ package com.emre.security.util;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 
 @Service
@@ -12,7 +13,9 @@ public class PyomoUtil {
         StringBuilder output = new StringBuilder();
         try {
             ProcessBuilder pb = new ProcessBuilder("python","C:\\Users\\Administrator\\Desktop\\vscode\\wfm\\main.py");
+            //C:\Users\Administrator\Desktop\vscode\wfm
 
+            pb.directory(new File("C:\\Users\\Administrator\\Desktop\\vscode\\wfm"));
             // Start the process
             Process p = pb.start();
             // Capture the output from the script
