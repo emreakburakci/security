@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
@@ -12,6 +15,20 @@ import java.util.logging.Logger;
 public class PyomoUtil {
 
     Logger logger = Logger.getLogger(PyomoUtil.class.getName());
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    public String runScriptAsync() {
+        StringBuilder output = new StringBuilder();
+        try {
+            Future<String> future = executorService.submit(this::runScript);
+            output.append(future.get());
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.warning(e.getMessage());
+            flushLogs();
+        }
+        return output.toString();
+    }
 
     public String runScript() {
         StringBuilder output = new StringBuilder();
