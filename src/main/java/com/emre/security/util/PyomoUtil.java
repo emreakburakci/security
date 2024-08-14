@@ -5,9 +5,12 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.logging.Logger;
 
 @Service
 public class PyomoUtil {
+
+    Logger logger = Logger.getLogger(PyomoUtil.class.getName());
 
     public String runScript() {
         StringBuilder output = new StringBuilder();
@@ -23,11 +26,13 @@ public class PyomoUtil {
             String line;
             while ((line = reader.readLine()) != null) {
                 output.append(line);
+                logger.info(line);
             }
             //get errorStream
             BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             while ((line = errorReader.readLine()) != null) {
                 output.append(line);
+                logger.warning(line);
             }
 
 
@@ -35,6 +40,7 @@ public class PyomoUtil {
             // Wait for the process to finish
             int exitCode = p.waitFor();
             if (exitCode != 0) {
+                logger.info("Exit Code:" + exitCode + "\n" + output.toString());
 
                 return "Exit Code:" + exitCode + "\n" + output.toString();
             }
@@ -42,6 +48,7 @@ public class PyomoUtil {
 
         }catch (Exception e) {
             e.printStackTrace();
+            logger.warning(e.getMessage());
         }
 
         return  output.toString();
