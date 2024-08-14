@@ -16,7 +16,7 @@ public class PyomoUtil {
     public String runScript() {
         StringBuilder output = new StringBuilder();
         try {
-            ProcessBuilder pb = new ProcessBuilder("python -u","C:\\Users\\Administrator\\Desktop\\vscode\\wfm\\main.py");
+            ProcessBuilder pb = new ProcessBuilder("python","-u","C:\\Users\\Administrator\\Desktop\\vscode\\wfm\\main.py");
             //C:\Users\Administrator\Desktop\vscode\wfm
 
             pb.directory(new File("C:\\Users\\Administrator\\Desktop\\vscode\\wfm"));
