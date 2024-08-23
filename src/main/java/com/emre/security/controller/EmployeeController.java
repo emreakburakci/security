@@ -1,26 +1,27 @@
 package com.emre.security.controller;
 
-import com.emre.security.model.Department;
 import com.emre.security.model.Employee;
 import com.emre.security.repository.EmployeeRepository;
+import com.emre.security.service.EmployeeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 //TEST
 //@CrossOrigin(origins = "http://127.0.0.1:5500")
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/employee")
+@RequiredArgsConstructor
 public class EmployeeController {
 
-    @Autowired
-    EmployeeRepository employeeRepository;
+
+    private EmployeeRepository employeeRepository;
+
+    private final EmployeeService employeeService;
 
     @PostMapping("/createEmployee")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -71,13 +72,10 @@ public class EmployeeController {
         return employeeRepository.findByEmailId(emailId);
     }
 
-
-
-
     //get all employees
     @GetMapping("/getAllEmployees")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public Page<Employee> getAllEmployees(Pageable pageable) {
-        return employeeRepository.findAll(pageable);
+        return employeeService.getAllEmployees(pageable);
     }
 }
